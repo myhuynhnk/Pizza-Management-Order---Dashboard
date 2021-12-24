@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Quản lý đơn hàng</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.1.0-10/css/all.css" />
+
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!--CSS Toats -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+    <!-- Import them style bootstrap cho datatable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Management Order</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#homeSubmenu">
+                        <i class="fa fa-home"></i>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-briefcase"></i>
+                        About us
+                    </a>
+                </li>
+                <li>
+                    <a href="#pageSubmenu">
+                        <i class="fas fa-file-alt"></i>
+                        News
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-paper-plane"></i>
+                        Contact
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!--  Content  -->
+        <div id="content">
+            <div class="container-fluid">
+                <div class="card text-center">
+                    <!-- Header -->
+                    <div class="card-header myCardHeader">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="text-left text-primary font-weight-bold">
+                                    List Order (Danh sách đơn hàng)
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <label for="select-status"
+                                class="col-sm-2 col-form-label text-primary font-weight-bold">Select Status</label>
+                            <div class="col-sm-2">
+                                <select name="status" id="select-status" class="form-control">
+                                    <option value="none" selected>All Select Status...</option>
+                                    <option value="open">Open</option>
+                                    <option value="confirmed">Confirm</option>
+                                    <option value="cancel">Cancel</option>
+                                </select>
+                            </div>
+                            <label for="select-pizza"
+                                class="col-sm-2 col-form-label text-primary font-weight-bold">Select type
+                                Pizza</label>
+                            <div class="col-sm-2">
+                                <select name="typePizza" id="select-pizza" class="form-control">
+                                    <option value="none" selected>All Select Pizza...</option>
+                                    <option value="Seafood">Seafood</option>
+                                    <option value="Hawaii">Hawaii</option>
+                                    <option value="Bacon">Bacon</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 btn-group">
+                                <button class="btn btn-success" id="btn-fill">
+                                    <i class="fa fa-search mr-2"></i>Filter
+                                </button>
+                                <button class="btn btn-success ml-1" id="btn-create">
+                                    <i class="fas fa-plus mr-2"></i>Create
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover" id="table-order">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Combo size</th>
+                                    <th>Type Of Pizza</th>
+                                    <th>Soft Drink</th>
+                                    <th>Total Price</th>
+                                    <th>Full Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Status</th>
+                                    <th>
+                                        Detail
+                                        <em class="fa fa-cog ml-2"></em>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal form detail order -->
+    <div class="modal fade" id="modalOrderDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="exampleModalLabel">Order Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-orderId"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Order ID (Mã đơn
+                                        hàng)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-orderId" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="select-combo"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Have
+                                        Combo</label>
+                                    <div class="col-sm-8">
+                                        <select name="combo" id="select-combo" class="form-control" disabled></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-diameter"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Diamerter Pizza
+                                        (cm)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-diameter" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-grill"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Grill ribs
+                                        (miếng)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-grill" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="select-drink"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Soft
+                                        drinks</label>
+                                    <div class="col-sm-8">
+                                        <select name="drink" id="select-drink" class="form-control" disabled></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-numberDrinks"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Number of
+                                        Drink</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-numberDrinks" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-voucherId"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Voucher ID (Mã
+                                        voucher)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-voucherId" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-typePizza"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold"> Type of Pizza
+                                        (Loại Pizza)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-typePizza" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-salad"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Salad (g)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-salad" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-total"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Total Pay</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-total" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-discount"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Discount (Giảm
+                                        giá)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-discount" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-fullName"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Full
+                                        Name</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-fullName" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-email"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Email</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-email" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-phone"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Phone
+                                        Number</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-phone" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-address"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-address" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-message"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Message</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-message" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-statusOrder"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Status
+                                        order</label>
+                                    <div class="col-sm-8">
+                                        <select name="status" id="inp-statusOrder" class="form-control">
+                                            <option value="none" selected> Select Status...</option>
+                                            <option value="open">Open</option>
+                                            <option value="confirmed">Confirm</option>
+                                            <option value="cancel">Cancel</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-orderDay"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Order
+                                        day</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-orderDay" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-updateDay"
+                                        class="col-sm-4 col-form-label text-left font-weight-bold">Update
+                                        day</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-updateDay" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btn-confirm">Confirm</button>
+                    <button type="button" class="btn btn-danger" id="btn-cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form create/insert order -->
+    <div class="modal fade" id="modalCreateOrder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="exampleModalLabel">Create New Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-fullName" class="col-sm-4 col-form-label">Họ tên <span
+                                            class="text-danger">(*)</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-fullName" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-email" class="col-sm-4 col-form-label">Email <span
+                                            class="text-danger">(*)</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-email" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-phone" class="col-sm-4 col-form-label">Số điện thoại <span
+                                            class="text-danger">(*)</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-phone" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-address" class="col-sm-4 col-form-label">Địa chỉ <span
+                                            class="text-danger">(*)</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-address" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-select-sizePizza" class="col-sm-4 col-form-label">Kích cỡ
+                                        (size)</label>
+                                    <div class="col-sm-8">
+                                        <select name="pizza size" id="inp-new-select-sizePizza" class="form-control">
+                                            <option value="none">Chọn size bánh</option>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-diameter" class="col-sm-4 col-form-label">Đường kính
+                                        (cm)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-diameter" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-grill" class="col-sm-4 col-form-label">Sườn nướng</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-grill" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-salad" class="col-sm-4 col-form-label">Salad (g)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-salad" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-drinks-number" class="col-sm-4 col-form-label">Số lượng
+                                        nước</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-drinks-number" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-price" class="col-sm-4 col-form-label">Giá tiền (VNĐ)</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-price" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-select-typePizza" class="col-sm-4 col-form-label">Loại
+                                        Pizza</label>
+                                    <div class="col-sm-8">
+                                        <select name="pizza type" id="inp-new-select-typePizza" class="form-control">
+                                            <option value="none">Chọn loại bánh</option>
+                                            <option value="Seafood">Seafood</option>
+                                            <option value="Hawaii">Hawaii</option>
+                                            <option value="Bacon">Bacon</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-select-drink" class="col-sm-4 col-form-label">Nước uống</label>
+                                    <div class="col-sm-8">
+                                        <select name="soft drink" id="inp-new-select-drink" class="form-control">
+                                            <option value="none">Chọn nước uống</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-voucherId" class="col-sm-4 col-form-label">Voucher Id</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-voucherId" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row form-group">
+                                    <label for="inp-new-message" class="col-sm-4 col-form-label">Lời nhắn</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="inp-new-message" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn-addNewOrder">Add New</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form confirm delete order -->
+    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="exampleModalLabel">Delete Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc muốn xóa đơn hàng này. Bấm confirm delete bên dưới để hoàn thành việc xóa đơn đặt hàng
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn-confirmDelete">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--  Bootstrap 4 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--JS Toats -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- DataTable -->
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <!-- Javascript -->
+    <script src="JS/main.js"></script>
+</body>
+
+</html>
